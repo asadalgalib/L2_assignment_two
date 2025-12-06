@@ -20,7 +20,7 @@ const initDb = async () => {
         CREATE TABLE IF NOT EXISTS vehicles(
         id SERIAL PRIMARY KEY,
         vehicle_name VARCHAR(150) NOT NULL,
-        type TEXT NOT NULL CHECK (type IN ('car','Car', 'bike','Bike', 'van','Van', 'SUV')),
+        type TEXT NOT NULL CHECK (type IN ('car', 'bike', 'van', 'SUV')),
         registration_number VARCHAR(150) UNIQUE NOT NULL,
         daily_rent_price NUMERIC NOT NULL CHECK (daily_rent_price > 0),
         availability_status VARCHAR(50) DEFAULT 'available' CHECK (availability_status IN ('available', 'booked'))
