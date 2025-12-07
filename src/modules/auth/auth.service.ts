@@ -29,7 +29,7 @@ const signUp = async (payload: Record<string, any>, res: Response) => {
 }
 
 const signIn = async (email: string, password: string) => {
-    
+
     // * Search User
     const result = await pool.query(`
         SELECT * FROM users
@@ -44,13 +44,13 @@ const signIn = async (email: string, password: string) => {
     }
 
     const token = jwt.sign({
-       name: user.name, role: user.role, email: user.email
+        id: user.id, name: user.name, role: user.role, email: user.email
     },
         envSecret.jwtSecret as string, {
         expiresIn: "10d"
     })
-    const {password : pass,...restUser} = user
-    return {token: token, user : restUser};
+    const { password: pass, ...restUser } = user
+    return { token: token, user: restUser };
 }
 
 export const authServices = {

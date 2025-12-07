@@ -12,7 +12,6 @@ export const authorizeAdmin = () => {
             if (!bearerToken) {
                 return unauthorizedError(res, { message: "Token not found" })
             }
-         
             const token = bearerToken.split(" ")[1];
             // * decode the token and set to custom type req.user
             const decoded = jwt.verify(token as string, envSecret.jwtSecret as string) as JwtPayload;
@@ -23,6 +22,37 @@ export const authorizeAdmin = () => {
             }
             // * Goo Goo Goo
             next()
+        } catch (error) {
+            internelServerError(res, error);
+        }
+    }
+}
+
+export const authorizeAdminOrOwn = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // * Got user id
+            const { userId } = req.params;
+            // * Got token
+            const bearerToken = req.headers.authorization
+            // * check if user has token
+            if (!bearerToken) {
+                return unauthorizedError(res, { message: "Token not found" })
+            }
+            // * decode the token and set to custom type req.user
+            const token = bearerToken.split(" ")[1];
+            const decoded = jwt.verify(token as string, envSecret.jwtSecret as string) as JwtPayload;
+            req.user = decoded;
+            // * If request id not matches with token id
+            if (req.user.id == userId) {
+                return next()
+            }
+            // * check if "admin" role not matches with the token role and 
+            if (req.user.role == "admin") {
+                return next()
+            }
+            return forbiddenError(res, { message: "You are not Admin or Owner" })
+
         } catch (error) {
             internelServerError(res, error);
         }
