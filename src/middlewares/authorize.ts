@@ -13,11 +13,9 @@ export const authorize = (...roles: string[]) => {
                 return unauthorizedError(res, { message: "Token not found" })
             }
             const token = bearerToken.split(" ")[1];
-            console.log(token);
             // * decode the token and set to custom type req.user
             const decoded = jwt.verify(token as string, envSecret.jwtSecret as string) as JwtPayload;
             req.user = decoded;
-            console.log(decoded);
             // * check if roles not matches with the user role
             if (roles.length && !roles.includes(req.user.role)) {
                 return forbiddenError(res, { message: "You do not have permission" })

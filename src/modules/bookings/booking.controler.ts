@@ -28,14 +28,28 @@ const getAllBooking = async (req: Request, res: Response) => {
     }
 }
 
-const updateBooking = async () => {
-
+const updateBooking = async (req: Request, res: Response) => {
+    try {
+        const reqRole = req.user?.role;
+        const { bookingId } = req.params;
+        const { status } = req.body;
+        if (reqRole === "admin" && status !== "returned") {
+            return badRequest(res, { message: 'Please enter "returned"' })
+        }
+        if (reqRole === "customer" && status !== "cancelled") {
+            return badRequest(res, { message: 'Please enter "cancelled"' })
+        }
+        const result = await bookingService.updateBooking(res, status, reqRole, bookingId as string)
+        return successGPD(res, "Booking updated  successfully", result)
+    } catch (error: any) {
+        return internelServerError(res, error);
+    }
 }
-const deleteBooking = async () => {
-
+const deleteBooking = async (req: Request, res: Response) => {
 }
 
 export const bookingControlers = {
     createBooking,
-    getAllBooking
+    getAllBooking,
+    updateBooking
 }

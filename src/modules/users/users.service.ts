@@ -34,7 +34,25 @@ const updateUser = async (name: string, email: string, password: string, phone: 
     return result;
 }
 
+const deleteUser = async (id: string) => {
+    const isBooked = await pool.query(`
+        SELECT * FROM bookings
+        WHERE customer_id=$1;`,
+        [id]
+    )
+    if (isBooked.rows[0].status === "booked") {
+        return false;
+    }
+    const result = await pool.query(`
+        DELETE FROM users 
+            WHERE id =$1`,
+        [id]
+    )
+    return true;
+}
+
 export const userServices = {
     getAllUser,
-    updateUser
+    updateUser,
+    deleteUser
 }

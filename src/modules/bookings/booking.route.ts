@@ -7,7 +7,10 @@ const router = Router();
 // * Create Booking (Admin or user)
 router.post("/", authorize("admin", "customer"), bookingControlers.createBooking)
 
-// * Get all Bookin (Role based)
-router.get("/", authorize("admin","customer"), bookingControlers.getAllBooking)
+// * Get all Booking (Role based)
+router.get("/", authorize("admin", "customer"), bookingControlers.getAllBooking);
+
+// * Update  Booking (Role based)
+router.put("/:bookingId", authorize("admin", "customer"), bookingControlers.updateBooking)
 
 export const bookingRoutes = router;

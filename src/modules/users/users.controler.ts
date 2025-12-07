@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { badRequest, forbiddenError, internelServerError } from "../../helper/handleError";
+import { badRequest, forbiddenError, internelServerError, notFound } from "../../helper/handleError";
 import { userServices } from "./users.service";
 import { successGPD, successPost } from "../../helper/handleOK";
 
@@ -45,8 +45,22 @@ const updateUser = async (req: Request, res: Response) => {
         return internelServerError(res, error)
     }
 }
+// * Delete user (Admin)
+const deleteUser = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    try {
+        const result = await userServices.deleteUser(userId as string);
+        if(!result){
+            return notFound(res,{message : "User booked a Vehicles"})
+        }
+        return successGPD(res,"User deleted successfully",[])
+    } catch (error: any) {
+        return internelServerError(res, error)
+    }
+}
 
 export const userControlers = {
     getAllUser,
-    updateUser
+    updateUser,
+    deleteUser
 }

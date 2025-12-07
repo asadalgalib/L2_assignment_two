@@ -11,5 +11,6 @@ router.get("/", authorize("admin"), userControlers.getAllUser);
 router.put("/:userId",authorize("admin","customer"), userControlers.updateUser);
 
 // * Delete user Route
+router.delete("/:userId",authorize("admin"),userControlers.deleteUser)
 
 export const userRoutes = router;
