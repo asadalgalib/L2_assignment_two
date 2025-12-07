@@ -21,7 +21,8 @@ const getAllUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const reqRole = req.user?.role
+        const reqRole = req.user?.role;
+        const reqId = req.user?.id;
         const { name, email, password, phone, role } = req.body;
 
         // * validation
@@ -31,14 +32,15 @@ const updateUser = async (req: Request, res: Response) => {
         if (email && email.toLowerCase() !== email) {
             return badRequest(res, { message: "email must be in lowercase" })
         }
+        // * if user try to change role and he is not admin
         if (role && reqRole !== "admin") {
-            return forbiddenError(res, { message: "Only Admin can update roles" })
+            return forbiddenError(res, { message: "Only admin can change roles" })
         }
         // * Bussiness Logic
-        const result = await userServices.updateUser(name, email, password, phone, role, reqRole, userId as string);
+        const result = await userServices.updateUser(name, email, password, phone, role, reqRole, reqId, userId as string);
         // * Response
         const { password: pass, ...restData } = result.rows[0]
-        return successPost(res, "User Updated successfully",  restData )
+        return successPost(res, "User Updated successfully", restData)
     } catch (error: any) {
         return internelServerError(res, error)
     }

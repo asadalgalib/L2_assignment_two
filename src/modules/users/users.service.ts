@@ -9,7 +9,7 @@ const getAllUser = async () => {
     return result
 }
 // * Update user (Admin or Own)
-const updateUser = async (name: string, email: string, password: string, phone: string, role: string, reqRole: string, userId: string) => {
+const updateUser = async (name: string, email: string, password: string, phone: string, role: string, reqRole: string, reqId: number, userId: string) => {
     // * hashing password
     let hashedPass;
     if (password) {
@@ -28,7 +28,7 @@ const updateUser = async (name: string, email: string, password: string, phone: 
                 END
             WHERE id=$7 
             RETURNING *`,
-        [name, email, hashedPass ?? password, phone, role, reqRole, userId]
+        [name, email, hashedPass ?? password, phone, role, reqRole, reqRole === "admin" ? userId : reqId]
     );
 
     return result;

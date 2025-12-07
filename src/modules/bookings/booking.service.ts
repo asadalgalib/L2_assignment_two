@@ -22,10 +22,38 @@ const createBooking = async (payload: Record<string, any>) => {
         RETURNING *;`,
         [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status]
     )
-    
+
     return { ...result.rows[0], vehicle: vehicle.rows[0] }
 }
 
+const getAllBooking = async (reqRole: string, reqId: number) => {
+
+    const booking = await pool.query(`
+        SELECT * FROM bookings
+        WHERE ($1 = 'admin') OR (customer_id=$2);`,
+        [reqRole, reqId]
+    )
+    const bookingResult = booking.rows;
+
+    const allBooking = await Promise.all(bookingResult.map(async (booking) => {
+
+        const customer = await pool.query(`
+            SELECT name, email FROM users
+            WHERE id=$1;`,
+            [booking.customer_id]
+        );
+        const vehicle = await pool.query(`
+            SELECT vehicle_name, registration_number FROM vehicles
+            WHERE id=$1;`,
+            [booking.vehicle_id]
+        )
+        return { ...booking, customer: customer.rows[0], vehicle: vehicle.rows[0] }
+    })
+    )
+    return allBooking;
+}
+
 export const bookingService = {
-    createBooking
+    createBooking,
+    getAllBooking
 }
