@@ -10,4 +10,6 @@ router.get("/", authorizeAdmin(), userControlers.getAllUser);
 // * Update user Route (Admin or own)
 router.put("/:userId", authorizeAdminOrOwn(), userControlers.updateUser);
 
+// * Delete user Route
+
 export const userRoutes = router;

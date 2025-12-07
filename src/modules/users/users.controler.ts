@@ -38,7 +38,7 @@ const updateUser = async (req: Request, res: Response) => {
         const result = await userServices.updateUser(name, email, password, phone, role, reqRole, userId as string);
         // * Response
         const { password: pass, ...restData } = result.rows[0]
-        return successPost(res, "User Updated successfully", { restData })
+        return successPost(res, "User Updated successfully",  restData )
     } catch (error: any) {
         return internelServerError(res, error)
     }

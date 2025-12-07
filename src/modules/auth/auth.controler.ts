@@ -9,7 +9,7 @@ const signUp = async (req: Request, res: Response) => {
         const result = await authServices.signUp(req.body, res);
         // * Send response
         const { password,...restData } = result;
-        return successPost(res, "User registered successfully", { restData })
+        return successPost(res, "User registered successfully",  restData)
     } catch (error: any) {
         return internelServerError(res, error)
     }

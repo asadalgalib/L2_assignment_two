@@ -17,11 +17,38 @@ export const authorizeAdmin = () => {
             const decoded = jwt.verify(token as string, envSecret.jwtSecret as string) as JwtPayload;
             req.user = decoded;
             // * check if "admin" role not matches with the user role
-            if (req.user.role !== "admin") {
-                return forbiddenError(res, { message: "You do not have permission" })
+            if (decoded.role === "admin") {
+                return next();
             }
+            return forbiddenError(res, { message: "You do not have permission" })
             // * Goo Goo Goo
-            next()
+
+        } catch (error) {
+            internelServerError(res, error);
+        }
+    }
+}
+
+export const authorizeUser = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // * Got token
+            const bearerToken = req.headers.authorization
+            // * check if user has token
+            if (!bearerToken) {
+                return unauthorizedError(res, { message: "Token not found" })
+            }
+            const token = bearerToken.split(" ")[1];
+            console.log(token);
+            // * decode the token and set to custom type req.user
+            const decoded = jwt.verify(token as string, envSecret.jwtSecret as string) as JwtPayload;
+            req.user = decoded;
+            console.log(decoded);
+            // * check if "admin" role not matches with the user role
+            if (decoded.role === "admin" || decoded.role === "customer") {
+                return next()
+            }
+            return forbiddenError(res, { message: "You do not have permission" })
         } catch (error) {
             internelServerError(res, error);
         }

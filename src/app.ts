@@ -4,6 +4,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { userRoutes } from "./modules/users/users.route";
 import { vehiclesRoutes } from "./modules/vehicles/vehicles.route";
 import './types/express/index.d.ts';
+import { bookingRoutes } from "./modules/bookings/booking.route";
 
 
 const app = express();
@@ -22,6 +23,9 @@ app.use("/api/v1/auth", authRoutes)
 app.use('/api/v1/users', userRoutes);
 
 // * Vehicles Routes
-app.use("/api/v1/vehicles", vehiclesRoutes)
+app.use("/api/v1/vehicles", vehiclesRoutes);
+
+// * Booking Routes
+app.use("/api/v1/bookings", bookingRoutes)
 
 export default app;
