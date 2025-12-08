@@ -50,10 +50,14 @@ const deleteUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
         const result = await userServices.deleteUser(userId as string);
-        if(!result){
-            return notFound(res,{message : "User booked a Vehicles"})
+        if (!result) {
+            return notFound(res, { message: "User booked a Vehicles" })
         }
-        return successGPD(res,"User deleted successfully",[])
+        if (result.rowCount === 0) {
+            console.log("row");
+            return notFound(res, { message: "User not found" })
+        }
+        return successGPD(res, "User deleted successfully", [])
     } catch (error: any) {
         return internelServerError(res, error)
     }

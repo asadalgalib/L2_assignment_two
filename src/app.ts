@@ -3,7 +3,6 @@ import initDb from "./database";
 import { authRoutes } from "./modules/auth/auth.route";
 import { userRoutes } from "./modules/users/users.route";
 import { vehiclesRoutes } from "./modules/vehicles/vehicles.route";
-import './types/express/index.d.ts';
 import { bookingRoutes } from "./modules/bookings/booking.route";
 
 

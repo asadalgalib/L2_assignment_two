@@ -40,7 +40,7 @@ const signIn = async (email, password) => {
         return false;
     }
     const token = jsonwebtoken_1.default.sign({
-        name: user.name, role: user.role, email: user.email
+        id: user.id, name: user.name, role: user.role, email: user.email
     }, config_1.default.jwtSecret, {
         expiresIn: "10d"
     });

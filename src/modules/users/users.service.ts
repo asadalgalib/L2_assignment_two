@@ -40,7 +40,7 @@ const deleteUser = async (id: string) => {
         WHERE customer_id=$1;`,
         [id]
     )
-    if (isBooked.rows[0].status === "booked") {
+    if (isBooked.rows[0] && isBooked.rows[0].status === "active") {
         return false;
     }
     const result = await pool.query(`
@@ -48,7 +48,7 @@ const deleteUser = async (id: string) => {
             WHERE id =$1`,
         [id]
     )
-    return true;
+    return result;
 }
 
 export const userServices = {

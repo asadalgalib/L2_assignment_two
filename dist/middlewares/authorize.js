@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authorizeAdmin = void 0;
+exports.authorize = void 0;
 const handleError_1 = require("../helper/handleError");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config"));
-const authorizeAdmin = () => {
+const authorize = (...roles) => {
     return (req, res, next) => {
         try {
             // * Got token
@@ -20,16 +20,16 @@ const authorizeAdmin = () => {
             // * decode the token and set to custom type req.user
             const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwtSecret);
             req.user = decoded;
-            // * check if "admin" role not matches with the user role
-            if (req.user.role !== "admin") {
+            // * check if roles not matches with the user role
+            if (roles.length && !roles.includes(req.user.role)) {
                 return (0, handleError_1.forbiddenError)(res, { message: "You do not have permission" });
             }
-            // * Goo Goo Goo
-            next();
+            return next();
         }
         catch (error) {
             (0, handleError_1.internelServerError)(res, error);
         }
     };
 };
-exports.authorizeAdmin = authorizeAdmin;
+exports.authorize = authorize;
+exports.default = exports.authorize;

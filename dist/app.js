@@ -8,6 +8,7 @@ const database_1 = __importDefault(require("./database"));
 const auth_route_1 = require("./modules/auth/auth.route");
 const users_route_1 = require("./modules/users/users.route");
 const vehicles_route_1 = require("./modules/vehicles/vehicles.route");
+const booking_route_1 = require("./modules/bookings/booking.route");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 (0, database_1.default)();
@@ -20,4 +21,6 @@ app.use("/api/v1/auth", auth_route_1.authRoutes);
 app.use('/api/v1/users', users_route_1.userRoutes);
 // * Vehicles Routes
 app.use("/api/v1/vehicles", vehicles_route_1.vehiclesRoutes);
+// * Booking Routes
+app.use("/api/v1/bookings", booking_route_1.bookingRoutes);
 exports.default = app;
