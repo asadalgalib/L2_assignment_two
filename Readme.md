@@ -5,12 +5,23 @@ Rent a Ride is a backend rental system with JWT-based authentication for secure 
 
 ## Live
 
-
-
 ```bash
   https://assignment-two-delta-gray.vercel.app/
 ```
 
+## Credentials
+
+Email
+
+```bash
+  asadalgalib9@gmail.com
+```
+
+Password
+
+```bash
+  123456
+```
 
 ## Tools and Technologies
 
